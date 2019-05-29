@@ -9,10 +9,17 @@
 </head>
 
 <body>
+    <video id="localVideo" autoplay muted style="width:40%;"></video>
+    <video id="remoteVideo" autoplay style="width:40%;"></video>
+
+    <br />
+
+    <input type="button" id="start" onclick="start(true)" value="Start Video"></input>
+
     <button id="connectButton" name="connectButton" class="buttonleft">
         Connect
     </button>
-    <button id="disconnectButton" name="disconnectButton" class="buttonright" disabled>
+    <button id="disconnectButton" name="disconnectButton" class="buttonright">
         Disconnect
     </button>
 
@@ -33,15 +40,43 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
     <script>
-        var peer = new Peer('A', { host: 'localhost', port: 9000, path: '/api' });
-        
+        var peer = new Peer('A', { host: '10.0.2.15', port: 9000, path: '/api' });
+        var localVideo;
+        var localStream;
+
         peer.on('open', function (id) {
             console.log('My peer ID is: ' + id);
         });
 
         peer.on('connection', (conn) => {
-            var con = conn;
+            //video
+            localVideo = document.getElementById('localVideo');
+            remoteVideo = document.getElementById('remoteVideo');
+            
+            var constraints = {
+                video: true,
+                audio: true,
+            };
+            
+            function getUserMediaSuccess(stream) {
+                localStream = stream;
+                localVideo.srcObject = stream;
+            }
+            
+            function errorHandler(error) {
+                console.log(error);
+            }
 
+            if(navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia(constraints).then(getUserMediaSuccess).catch(errorHandler);
+            } else {
+                alert('Your browser does not support getUserMedia API');
+            }
+            
+
+            //text message
+            var con = conn;
+            
             function sendMessage(){
                 var message = messageInputBox.value;
                 conn.send(message);
