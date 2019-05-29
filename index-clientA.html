@@ -40,9 +40,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
     <script>
-        var peer = new Peer('A', { host: '10.0.2.15', port: 9000, path: '/api' });
+        var peer = new Peer('A', { host: '172.20.10.2', port: 9000, path: '/api' });
         var localVideo;
         var localStream;
+        var remoteVideo;
 
         peer.on('open', function (id) {
             console.log('My peer ID is: ' + id);
@@ -61,6 +62,7 @@
             function getUserMediaSuccess(stream) {
                 localStream = stream;
                 localVideo.srcObject = stream;
+                peer.call(conn.peer,stream);
             }
             
             function errorHandler(error) {
@@ -73,6 +75,12 @@
                 alert('Your browser does not support getUserMedia API');
             }
             
+            peer.on('call',function(call) {
+                call.answer(localStream)
+                call.on('stream', function(stream) {
+                    remoteVideo.srcObject = stream;
+                })
+            })
 
             //text message
             var con = conn;
