@@ -20,13 +20,7 @@
                 <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
             </div>
         </div>
-        <div id="cetral">
-            <p id="time"> 2:00</p>
-            <video id="localVideo" autoplay muted style="width:40%;">
-            </video>
-            <video id="remoteVideo" autoplay style="width:40%;">
-            </video>
-        </div>
+        <p id="time"> 2:00</p>
         <div id="enemy" class="player">
             <div id="enemy_score"></div>
             <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
@@ -50,47 +44,9 @@
     <script src="tetris.js"></script>
     <!-- set connection -->
     <script>
-        var localVideo;
-        var localStream;
-        var remoteVideo;
+        var flag = false;
         var peer = new Peer('B', { host: 'localhost', port: 9000, path: '/api' });
-        // var peer = new Peer('B', { host: '192.168.208.105', port: 9000, path: '/api' });
         var conn = peer.connect('A');
-        
-        //video
-        localVideo = document.getElementById('localVideo');
-        remoteVideo = document.getElementById('remoteVideo');
-        
-        var constraints = {
-            video: true,
-            audio: true,
-        };
-        
-        function getUserMediaSuccess(stream) {
-            localStream = stream;
-            localVideo.srcObject = stream;
-        }
-        
-        function errorHandler(error) {
-            console.log(error);
-        }
-
-        if(navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia(constraints).then(getUserMediaSuccess).catch(errorHandler);
-        } else {
-            alert('Your browser does not support getUserMedia API');
-        }
-        
-
-        peer.on('call',function (call) {
-            call.answer(localStream);
-            peer.call(conn.peer,localStream);
-            call.on('stream', function(stream) {
-                remoteVideo.srcObject = stream;
-            })
-        });
-
-        //game
 
         function sendMessage(){
             var message = JSON.stringify( 
@@ -117,24 +73,36 @@
          * Draw enemy
          */ 
         conn.on('data', (data) => {
-            let jData = JSON.parse(data);
-            enemyArena = jData.arena;
-            enemy_player = jData.player;
-            enemy_target_block = jData.target_block;
-            enemy_next_block = jData.next_block;
-            time_str = jData.time;
-            document.getElementById("time").innerHTML = jData.time;
-            drawEnemy();
-        });
-
-        peer.on('stop',function(stop) {
-            playerstop();
+            if(data == "stop") {
+                cancelAnimationFrame(animation);
+                flag = true;
+            }
+            else if(data == "continue") {
+                update(lastTime);
+                flag = false;
+            }
+            else {
+                let jData = JSON.parse(data);
+                enemyArena = jData.arena;
+                enemy_player = jData.player;
+                enemy_target_block = jData.target_block;
+                enemy_next_block = jData.next_block;
+                drawEnemy();
+            }
         });
 
         document.addEventListener('keydown', event => {
             if (event.keyCode === 80) {
-                playerstop();
-                peer.stop(conn.peer);
+                if (flag == false) {
+                    conn.send("stop");
+                    cancelAnimationFrame(animation);
+                    flag = true;
+                }
+                else {
+                    conn.send("continue");
+                    update(lastTime);
+                    flag = false;
+                }
             }
         });
     </script>

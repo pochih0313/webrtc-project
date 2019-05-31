@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Tetris</title>
+    <link rel="stylesheet" href="config.css">
+</head>
+<body>
+    <div id="game">
+        <div id="your" class="player">
+            <div id="your_score"></div>
+            <canvas class="arena" id="tetris" width="240" height="400" > </canvas>
+            <div class="hint">
+                <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
+                <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
+            </div>
+        </div>
+        <p id="time"> 2:00</p>
+        <div id="enemy" class="player">
+            <div id="enemy_score"></div>
+            <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
+            <div class="hint">
+                <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
+                <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
+            </div>
+        </div>
+    </div>
+    <script src="init.js"></script>
+    <script src="player_action.js"></script>
+    <script src="DOM_and_Matrix.js"></script>
+    <script src="draw.js"></script>
+    <script src="tetris.js"></script>
+</body>
+</html>

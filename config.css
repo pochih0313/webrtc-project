@@ -19,22 +19,17 @@ canvas {
 	display: flex;
   	justify-content: flex-start;
 }
-
+/*.arena{
+	width:240px; 
+	height:240px;
+}*/
 .hint{
 	display: flex;
 	justify-content: flex-start;
 	flex-direction: column;
-	align-items: flex-start
-}
-.enemy_hint{
-	display: flex;
-	justify-content: flex-start;
-	flex-direction: column;
-	align-items: flex-end
 }
 .hint_block{
 	width:100px;
 	height:100px;
 	flex-shrink:0;
 }
-

@@ -80,7 +80,4 @@ function drawEnemy() {
     drawTarget_Block(enemy_target_block.matrix, enemy_target_block.pos, enemyContext);
     drawNext(enemy_next_block.matrix, {x: 0, y: 0}, enemy_next_canvas, enemy_next_context);
     drawMatrix(enemy_player.matrix, enemy_player.pos, enemyContext);
-
 }
-
-

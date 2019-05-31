@@ -44,11 +44,8 @@ function playerDrop() {
         playerReset();
         arenaSweep();
         updateScore();
-        
     }
 }
-
-
 
 function playerDropToBottom() {
     for(; !collide(arena, player); player.pos.y++);
@@ -60,5 +57,3 @@ function playerDropToBottom() {
     updateScore();
     dropCounter = 0;
 }
-
-

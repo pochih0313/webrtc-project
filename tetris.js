@@ -92,19 +92,20 @@ let timeCounter = 0;
 let timeInterval = 1000;
 let gameOver = 0;
 let lastTime = 0;
+var animation;
 function update(time = 0) {
     const deltaTime = time - lastTime;
+
     dropCounter += deltaTime;
     if (dropCounter > dropInterval) {
         playerDrop();
         dropCounter = 0;
-        
+        sendMessage();
     }
 
     timeCounter += deltaTime;
     if(timeCounter > timeInterval)
     {
-        
         seconds -= 1;
         if(seconds == 0)
         {
@@ -117,36 +118,23 @@ function update(time = 0) {
                 gameOver = 1;
         }   
         //update count down clock
-        var time_str = minutes + ":" + seconds;
-        document.getElementById("time").innerHTML = time_str;
-        sendMessage();
+        document.getElementById("time").innerHTML = minutes + ":" + seconds;
         timeCounter = 0;
     }
     lastTime = time;
+    
     draw();
     if(!gameOver)
     {
         //Make update run continously
         //And send game status
-        requestAnimationFrame(update);
+        animation = requestAnimationFrame(update);
+        // sendMessage();
     }
-    if(gameOver){
-        alert("You Lose!");
-    }
-
 }
-
-
-function playerstop(){
-    alert("stop");
-}
-
 
 function updateScore() {
     document.getElementById('your_score').innerText = player.score;
-    document.getElementById('enemy_score').innerText = enemy_player.score;
-
-
 }
 
 document.addEventListener('keydown', event => {
@@ -165,17 +153,12 @@ document.addEventListener('keydown', event => {
     	playerDropToBottom();
     } else if (event.keyCode === 16) {
     	set_store_block();
-    } 
-    // else if (event.keyCode === 80) {
-    //     playerstop();
-    // }
+    }
     //each time the player moving the block
     //send message
     sendMessage();
 });
 
-
-let time_str = "";
 let minutes = 1;
 let seconds = 60;
 // playerReset();
