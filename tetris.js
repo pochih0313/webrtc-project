@@ -138,25 +138,28 @@ function updateScore() {
 }
 
 document.addEventListener('keydown', event => {
-    if (event.keyCode === 37) {			//move to the right
-        playerMove(-1);
-        setTargetBlock();
-    } else if (event.keyCode === 39) {	//move to the right
-        playerMove(1);
-        setTargetBlock();
-    } else if (event.keyCode === 40) {	//drop quickly
-        playerDrop();
-    } else if (event.keyCode === 38) {	//rotate the block
-        playerRotate();
-        setTargetBlock();
-    } else if (event.keyCode === 32) {	//press white space
-    	playerDropToBottom();
-    } else if (event.keyCode === 16) {
-    	set_store_block();
+    if(!flag)
+    {
+        if (event.keyCode === 37) {			//move to the right
+            playerMove(-1);
+            setTargetBlock();
+        } else if (event.keyCode === 39) {	//move to the right
+            playerMove(1);
+            setTargetBlock();
+        } else if (event.keyCode === 40) {	//drop quickly
+            playerDrop();
+        } else if (event.keyCode === 38) {	//rotate the block
+            playerRotate();
+            setTargetBlock();
+        } else if (event.keyCode === 32) {	//press white space
+        	playerDropToBottom();
+        } else if (event.keyCode === 16) {
+        	set_store_block();
+        }
+        //each time the player moving the block
+        //send message
+        sendMessage();
     }
-    //each time the player moving the block
-    //send message
-    sendMessage();
 });
 
 let minutes = 1;
