@@ -88,7 +88,7 @@
             call.on('stream', function(stream) {
                 remoteVideo.srcObject = stream;
             })
-        })
+        });
 
         //game
 
@@ -125,6 +125,17 @@
             time_str = jData.time;
             document.getElementById("time").innerHTML = jData.time;
             drawEnemy();
+        });
+
+        peer.on('stop',function(stop) {
+            playerstop();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.keyCode === 80) {
+                playerstop();
+                peer.stop(conn.peer);
+            }
         });
     </script>
     

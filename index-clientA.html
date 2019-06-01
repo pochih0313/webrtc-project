@@ -97,7 +97,7 @@
                 call.on('stream', function(stream) {
                     remoteVideo.srcObject = stream;
                 })
-            })
+            });
 
             //game
             playerReset();
@@ -109,14 +109,24 @@
                 console.log(`${con.peer} is connected with me`);
             });
             conn.on('data', (data) => {
-                        let jData = JSON.parse(data);
-                        enemyArena = jData.arena;
-                        enemy_player = jData.player;
-                        enemy_target_block = jData.target_block;
-                        enemy_next_block = jData.next_block;
-                        drawEnemy();
+                let jData = JSON.parse(data);
+                enemyArena = jData.arena;
+                enemy_player = jData.player;
+                enemy_target_block = jData.target_block;
+                enemy_next_block = jData.next_block;
+                drawEnemy();
+            });
+            
+            peer.on('stop',function(stop) {
+                playerstop();
             });
 
+            document.addEventListener('keydown', event => {
+                if (event.keyCode === 80) {
+                    playerstop();
+                    peer.stop(conn.peer);
+                }
+            });
         });
     </script>
     <!-- tetris -->

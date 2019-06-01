@@ -165,9 +165,10 @@ document.addEventListener('keydown', event => {
     	playerDropToBottom();
     } else if (event.keyCode === 16) {
     	set_store_block();
-    } else if (event.keyCode === 80) {
-        playerstop();
-    }
+    } 
+    // else if (event.keyCode === 80) {
+    //     playerstop();
+    // }
     //each time the player moving the block
     //send message
     sendMessage();
