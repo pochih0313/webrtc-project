@@ -10,8 +10,7 @@
 </head>
 
 <body>
-    <video id="localVideo" autoplay muted style="width:40%;"></video>
-    <video id="remoteVideo" autoplay style="width:40%;"></video>
+    
     <br />
 
     <!-- Include Gaming elements -->
@@ -24,7 +23,13 @@
                 <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
             </div>
         </div>
-        <p id="time"> 2:00</p>
+        <div id="cetral">
+            <p id="time"> 2:00</p>
+            <video id="localVideo" autoplay muted style="width:40%;">
+            </video>
+            <video id="remoteVideo" autoplay style="width:40%;">
+            </video>
+        </div>
         <div id="enemy" class="player">
             <div id="enemy_score"></div>
             <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
