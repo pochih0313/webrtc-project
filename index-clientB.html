@@ -6,45 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ClientB</title>
+    <link rel="stylesheet" href="config.css">
 </head>
 
 <body>
+
     <video id="localVideo" autoplay muted style="width:40%;"></video>
     <video id="remoteVideo" autoplay style="width:40%;"></video>
-
     <br />
 
-    <input type="button" id="start" onclick="start(true)" value="Start Video"></input>
-
-    <button id="connectButton" name="connectButton" class="buttonleft">
-        Connect
-    </button>
-    <button id="disconnectButton" name="disconnectButton" class="buttonright">
-        Disconnect
-    </button>
-
-    <div class="messagebox">
-        <label for="message">Enter a message:
-            <input type="text" name="message" id="message" placeholder="Message text"
-                inputmode="latin" size=60 maxlength=100> 
-        </label>
-        <button id="sendButton" name="sendButton" class="buttonright">
-            Send
-        </button>
+    <!-- Include Gaming elements -->
+    <div id="game">
+        <div id="your" class="player">
+            <div id="your_score"></div>
+            <canvas class="arena" id="tetris" width="240" height="400" > </canvas>
+            <div class="hint">
+                <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
+                <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
+            </div>
+        </div>
+        <p id="time"> 2:00</p>
+        <div id="enemy" class="player">
+            <div id="enemy_score"></div>
+            <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
+            <div class="hint">
+                <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
+                <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
+            </div>
+        </div>
     </div>
 
-    <div class="messagebox" id="receivebox">
-        <p> Messages received:</p>
-    </div>
-
+    <!-- Include jquery -->
+    <!-- Include peerjs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
+
+    <!-- tetris -->
+    <script src="init.js"></script>
+    <script src="player_action.js"></script>
+    <script src="DOM_and_Matrix.js"></script>
+    <script src="draw.js"></script>
+    <script src="tetris.js"></script>
+    <!-- set connection -->
     <script>
-        var peer = new Peer('B', { host: '172.20.10.2', port: 9000, path: '/api' });
-        var conn = peer.connect('A');
         var localVideo;
         var localStream;
         var remoteVideo;
+        var peer = new Peer('B', { host: '192.168.208.105', port: 9000, path: '/api' });
+        var conn = peer.connect('A');
         
         //video
         localVideo = document.getElementById('localVideo');
@@ -79,38 +88,42 @@
             })
         })
 
+        //game
 
-        //text
         function sendMessage(){
-            var message = messageInputBox.value;
+            var message = JSON.stringify( 
+                {'arena':arena, 'player':player, 'target_block':target_block,
+                'next_block':next_block, 'store_block':store_block
+            });
             conn.send(message);
-            messageInputBox.value = "";
-            messageInputBox.focus();
         }
-
-        sendButton = document.getElementById('sendButton');
-        messageInputBox = document.getElementById('message');
-        sendButton,addEventListener('click', sendMessage, false);
-        receiveBox = document.getElementById('receivebox');
 
         peer.on('open', function (id) {
             console.log('My peer ID is: ' + id);
+            playerReset();
+            updateScore();
+            update();
+
         });
 
         conn.on('open', () => {
-            //conn.send('Hi I am B');
+            conn.send('Hi I am B without param');
         });
 
+        /* Receive data from client A
+         * Assign data to enemy Object
+         * Draw enemy
+         */ 
         conn.on('data', (data) => {
-            console.log(`${conn.peer} : ` + data);
-
-            var el = document.createElement("p");
-            var txtNode = document.createTextNode(data);
-            el.appendChild(txtNode);
-            receiveBox.appendChild(el);
+            let jData = JSON.parse(data);
+            enemyArena = jData.arena;
+            enemy_player = jData.player;
+            enemy_target_block = jData.target_block;
+            enemy_next_block = jData.next_block;
+            drawEnemy();
         });
-
     </script>
+    
 </body>
 
 </html>
