@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 var http = require('http')
 const expressPeerServer = require('peer').ExpressPeerServer;
-http.createServer(app).listen(9000)
-//const server = app.listen(9000);
+//http.createServer(app).listen(9000)
+const server = app.listen(9000);
 
 const peerserver = expressPeerServer(server);
 

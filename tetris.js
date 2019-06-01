@@ -129,7 +129,6 @@ function update(time = 0) {
         //Make update run continously
         //And send game status
         requestAnimationFrame(update);
-        // sendMessage();
     }
     if(gameOver){
         alert("You Lose!");

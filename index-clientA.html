@@ -16,27 +16,25 @@
     <!-- Include Gaming elements -->
     <div id="game">
         <div id="your" class="player">
-            <div id="your_score"></div>
             <canvas class="arena" id="tetris" width="240" height="400" > </canvas>
             <div class="hint">
+            	<div id="your_score"></div>
                 <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
                 <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
+                <video id="localVideo" autoplay muted style="width:60%;"></video>
             </div>
         </div>
         <div id="cetral">
             <p id="time"> 2:00</p>
-            <video id="localVideo" autoplay muted style="width:40%;">
-            </video>
-            <video id="remoteVideo" autoplay style="width:40%;">
-            </video>
         </div>
         <div id="enemy" class="player">
-            <div id="enemy_score"></div>
-            <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
-            <div class="hint">
-                <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
-                <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
-            </div>
+	        <div class="enemy_hint">
+	        	<div id="enemy_score"></div>
+	        	<video id="remoteVideo" autoplay style="width:60%;"></video>
+	            <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
+	            <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
+	        </div>
+	        <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
         </div>
     </div>
 
@@ -50,7 +48,7 @@
         var localVideo;
         var localStream;
         var remoteVideo;
-        var peer = new Peer('A', { host: '192.168.208.105', port: 9000, path: '/api' });
+        var peer = new Peer('A', { host: 'localhost', port: 9000, path: '/api' });
         //connection socket
         
         let con;

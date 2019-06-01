@@ -53,7 +53,8 @@
         var localVideo;
         var localStream;
         var remoteVideo;
-        var peer = new Peer('B', { host: '192.168.208.105', port: 9000, path: '/api' });
+        var peer = new Peer('B', { host: 'localhost', port: 9000, path: '/api' });
+        // var peer = new Peer('B', { host: '192.168.208.105', port: 9000, path: '/api' });
         var conn = peer.connect('A');
         
         //video
