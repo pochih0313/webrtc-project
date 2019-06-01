@@ -60,7 +60,7 @@
         function sendMessage(){
             var message = JSON.stringify( 
                 {'arena':arena, 'player':player, 'target_block':target_block,
-                'next_block':next_block, 'store_block':store_block
+                'next_block':next_block, 'store_block':store_block, 'time':time_str
             });
             con.send(message);
         }

@@ -117,8 +117,8 @@ function update(time = 0) {
                 gameOver = 1;
         }   
         //update count down clock
-        
-        document.getElementById("time").innerHTML = minutes + ":" + seconds;
+        var time_str = minutes + ":" + seconds;
+        document.getElementById("time").innerHTML = time_str;
         sendMessage();
         timeCounter = 0;
     }
@@ -174,7 +174,7 @@ document.addEventListener('keydown', event => {
 });
 
 
-
+let time_str = "";
 let minutes = 1;
 let seconds = 60;
 // playerReset();
