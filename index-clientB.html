@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 90%;width:90%;">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,45 +10,49 @@
 </head>
 
 <body style="height: 100%;margin: 0px;padding: 0px;">
-    <!-- Include Gaming elements -->
-    <div id="cetral" style="height: 0%">
-        <p id="time"  style="font-family:monospace;font-size:60px;font-weight:bold;color:red;margin-left:200px;"> 2:00</p>
-    </div>
-
-    <table style="width:90%;"  id="game" style="height: 90%;">
-        <tbody >
-            <tr class ="container"> 
-        
-                <td   id="your"  class="player" style="width: 50vw;float:left;">
-                    <canvas class="arena" id="tetris" width="240" height="400" > </canvas>
-                        <div >
-                            <div class="hint">
-                                <div id="your_score"></div>
-                                <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
-                                <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
-                            </div>
-                            <br><br><br><br>
-                            <div >
-                                <video id="localVideo"    autoplay muted style="width:240px;height:240px;"></video>
-                            </div>
-                        </div>
-                    
-                </td>
-                
-                <td id="enemy" class="player" style="width: 50vw;float:left;">
-                    <div class="enemy_hint">
-                        <div id="enemy_score"></div>
-                        <video id="remoteVideo" autoplay muted style="width:240px;height:240px;"></video>
-                        <br><br><br><br><br>
-                        <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
-                        <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
-                    </div>
-                    <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
-                </td>
-            </tr>
+        <!-- Include Gaming elements -->
+        <div id="cetral" style="height: 0%">
+            <p id="time"  style="font-family:monospace;font-size:60px;font-weight:bold;color:red;margin-left:200px;"> 2:00</p>
+        </div>
+    
+        <table style="width:90%;"  id="game" style="height: 90%;">
+            <tbody >
+                <tr class ="container"> 
             
-        </tbody>
-    </table>
+                    <td id="your"  class="player" style="width: 50vw;float:left;">
+                        <canvas class="arena" id="tetris" width="240" height="400" > </canvas>
+                            <div >
+                                <div class="hint">
+                                    <div id="your_score"></div>
+                                    <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
+                                    <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
+                                </div>
+                                <br>
+                                <button id="connectButton" name="connectButton" class="buttonleft" style="width:50px;height:30px;">
+                                    Ready
+                                </button>
+                                <br>
+                                <div >
+                                    <video id="localVideo"    autoplay muted style="width:240px;height:240px;"></video>
+                                </div>
+                            </div>
+                        
+                    </td>
+                    
+                    <td id="enemy" class="player" style="width: 50vw;float:left;">
+                        <div class="enemy_hint">
+                            <div id="enemy_score"></div>
+                            <video id="remoteVideo" autoplay muted style="width:240px;height:240px;"></video>
+                            <br><br><br><br><br>
+                            <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
+                            <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
+                        </div>
+                        <canvas class="arena" id="enemy_tetris" width="240" height="400" > </canvas>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
 
     <!-- Include jquery -->
     <!-- Include peerjs -->
@@ -64,8 +68,42 @@
     <!-- set connection -->
     <script>
         var flag = false;
-        var peer = new Peer('B', { host: '192.168.208.128', port: 9000, path: '/api' });
-        var conn = peer.connect('A');
+        var peer = new Peer('B', { host: 'localhost', port: 9000, path: '/api' });
+        var conn;
+        var localVideo;
+        var localStream;
+        var remoteVideo;
+
+        //setting element
+        connectButton = document.getElementById('connectButton');
+        connectButton.addEventListener('click', connect_peer, false);
+        localVideo = document.getElementById('localVideo');
+        remoteVideo = document.getElementById('remoteVideo');
+        
+        peer.on('open', function (id) {
+            console.log('My peer ID is: ' + id);
+        });
+        
+        //video        
+        var constraints = {
+            video: true,
+            audio: true,
+        };
+        
+        function getUserMediaSuccess(stream) {
+            localStream = stream;
+            localVideo.srcObject = stream;
+        }
+        
+        function errorHandler(error) {
+            console.log(error);
+        }
+
+        if(navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(constraints).then(getUserMediaSuccess).catch(errorHandler);
+        } else {
+            alert('Your browser does not support getUserMedia API');
+        }
 
         function sendMessage(){
             var message = JSON.stringify( 
@@ -75,55 +113,72 @@
             conn.send(message);
         }
 
-        peer.on('open', function (id) {
-            console.log('My peer ID is: ' + id);
-            playerReset();
-            updateScore();
-            update();
+        function connect_peer() {
+            conn = peer.connect('A');
+            
+            peer.on('call',function (call) {
+                call.answer(localStream);
+                peer.call(conn.peer,localStream);
+                call.on('stream', function(stream) {
+                    remoteVideo.srcObject = stream;
+                })
+            })
+                
+            
 
-        });
+            conn.on('open', () => {
+                conn.send('Hi I am B without param');
+                playerReset();
+                updateScore();
+                update();
+            });
 
-        conn.on('open', () => {
-            conn.send('Hi I am B without param');
-        });
-
-        /* Receive data from client A
-         * Assign data to enemy Object
-         * Draw enemy
-         */ 
-        conn.on('data', (data) => {
-            if(data == "stop") {
-                cancelAnimationFrame(animation);
-                flag = true;
-            }
-            else if(data == "continue") {
-                update(lastTime);
-                flag = false;
-            }
-            else {
-                let jData = JSON.parse(data);
-                enemyArena = jData.arena;
-                enemy_player = jData.player;
-                enemy_target_block = jData.target_block;
-                enemy_next_block = jData.next_block;
-                drawEnemy();
-            }
-        });
-
-        document.addEventListener('keydown', event => {
-            if (event.keyCode === 80) {
-                if (flag == false) {
-                    conn.send("stop");
+            /* Receive data from client A
+            * Assign data to enemy Object
+            * Draw enemy
+            */ 
+            conn.on('data', (data) => {
+                if(data == "stop") {
                     cancelAnimationFrame(animation);
                     flag = true;
                 }
-                else {
-                    conn.send("continue");
+                else if(data == "continue") {
                     update(lastTime);
                     flag = false;
                 }
-            }
-        });
+                else if(data == "connect") {
+                    connect_flag = true;
+                }
+                else {
+                    let jData = JSON.parse(data);
+                    enemyArena = jData.arena;
+                    enemy_player = jData.player;
+                    enemy_target_block = jData.target_block;
+                    enemy_next_block = jData.next_block;
+                    drawEnemy();
+                }
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.keyCode === 80) {
+                    if (flag == false) {
+                        conn.send("stop");
+                        cancelAnimationFrame(animation);
+                        flag = true;
+                    }
+                    else {
+                        conn.send("continue");
+                        update(lastTime);
+                        flag = false;
+                    }
+                }
+            });
+            
+
+            
+
+            
+        }
     </script>
     
 </body>
