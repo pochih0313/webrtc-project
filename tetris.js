@@ -54,11 +54,12 @@ function playerReset() {
     setTargetBlock();
     //if player lose
     if (collide(arena, player)) {
-        arena.forEach(row => row.fill(0));
+        //arena.forEach(row => row.fill(0));
         player.score = 0;
-        // console.log('QQ lose')
-        // conn.send("lose");
-        // cancelAnimationFrame(animation);
+        console.log('QQ lose')
+        con.send("lose");
+        alert('you lose');
+        cancelAnimationFrame(animation);
         setTargetBlock();
         updateScore();
     }
@@ -136,6 +137,13 @@ function update(time = 0) {
         //And send game status
         animation = requestAnimationFrame(update);
         // sendMessage();
+    }
+    else
+    {
+        if(enemy_player.score > player.score)
+            alert("You Lose");
+        else
+            alert("You win");
     }
 }
 

@@ -44,12 +44,12 @@ function playerDrop() {
         playerReset();
         arenaSweep();
         updateScore();
+
     }
 }
 
 function playerDropToBottom() {
     for(; !collide(arena, player); player.pos.y++);
-    
     player.pos.y--;
     merge(arena, player);
     playerReset();  //drop new block
