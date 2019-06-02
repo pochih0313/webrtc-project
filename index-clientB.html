@@ -28,7 +28,7 @@
                                     <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
                                 </div>
                                 <br>
-                                <button id="connectButton" name="connectButton" class="buttonleft" style="width:50px;height:30px;">
+                                <button id="connectButton" name="connectButton" class="button" style="width:50px;height:30px;">
                                     Ready
                                 </button>
                                 <br>
@@ -149,6 +149,12 @@
                 else if(data == "connect") {
                     connect_flag = true;
                 }
+                // else if(data == 'lose'){
+                //     console.log("Win");
+                //     alert('U win');
+                //     cancelAnimationFrame(animation);
+                //     flag = false;
+                // }
                 else {
                     let jData = JSON.parse(data);
                     enemyArena = jData.arena;

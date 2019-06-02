@@ -45,3 +45,43 @@ canvas {
 	height:100px;
 	flex-shrink:0;
 }
+
+.button {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 28px;
+    border: 0px solid ##020b0e;
+    border-radius: 8px;
+    background: #072e3b;
+    background: -webkit-gradient(linear, left top, left bottom, from(#072e3b), to(##020b0e));
+    background: -moz-linear-gradient(top, #072e3b, ##020b0e);
+    background: linear-gradient(to bottom, #072e3b, ##020b0e);
+    -webkit-box-shadow: #020d11 16px 5px 63px 3px;
+    -moz-box-shadow: #020d11 16px 5px 63px 3px;
+    box-shadow: #020d11 16px 5px 63px 3px;
+    text-shadow: #010607 -3px 0px 4px;
+    font: normal normal bold 18px comic sans ms;
+    color: #fafafa;
+    text-decoration: none;
+    text-transform: uppercase
+}
+.button:hover {
+    background: #083747;
+    background: -webkit-gradient(linear, left top, left bottom, from(#083747), to(#020d11));
+    background: -moz-linear-gradient(top, #083747, #020d11);
+    background: linear-gradient(to bottom, #083747, #020d11);
+    color: #fafafa;
+    text-decoration: none;
+    text-transform: uppercase
+}
+.button:active {
+    background: #041c23;
+    background: -webkit-gradient(linear, left top, left bottom, from(#041c23), to(##020b0e));
+    background: -moz-linear-gradient(top, #041c23, ##020b0e);
+    background: linear-gradient(to bottom, #041c23, ##020b0e);
+    text-transform: uppercase
+}
+.button:focus {
+    text-transform: uppercase
+}

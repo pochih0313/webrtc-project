@@ -52,9 +52,13 @@ function playerReset() {
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length / 2 | 0);
     setTargetBlock();
+    //if player lose
     if (collide(arena, player)) {
         arena.forEach(row => row.fill(0));
         player.score = 0;
+        // console.log('QQ lose')
+        // conn.send("lose");
+        // cancelAnimationFrame(animation);
         setTargetBlock();
         updateScore();
     }
