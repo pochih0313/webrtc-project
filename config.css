@@ -23,10 +23,22 @@ canvas {
 	width:240px; 
 	height:240px;
 }*/
+.container {
+	display: flex;
+	justify-content: space-between;
+  }
+
 .hint{
 	display: flex;
 	justify-content: flex-start;
 	flex-direction: column;
+	align-items: flex-start;
+}
+.enemy_hint{
+	justify-content: flex-end;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
 }
 .hint_block{
 	width:100px;
