@@ -86,7 +86,6 @@
         function getUserMediaSuccess(stream) {
             localStream = stream;
             localVideo.srcObject = stream;
-            
         }
         
         function errorHandler(error) {
@@ -108,6 +107,7 @@
         }
 
         function connect_peer() {
+            connectButton.disabled = true;
             peer.on('connection', (conn) => {
                 con = conn;
                 

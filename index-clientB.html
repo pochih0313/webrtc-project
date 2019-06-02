@@ -114,6 +114,8 @@
         }
 
         function connect_peer() {
+            connectButton.disabled = true;
+            
             conn = peer.connect('A');
             
             peer.on('call',function (call) {
