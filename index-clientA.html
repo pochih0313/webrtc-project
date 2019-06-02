@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%;margin: 0px;padding: 0px;">
 
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
 
         <!-- Include Gaming elements -->
         <div id="cetral" style="height: 0%">
-            <p id="time"  style="font-family:monospace;font-size:60px;font-weight:bold;color:red;margin-left:200px;"> 2:00</p>
+            <p id="time"  style="font-family:monospace;font-size:30px;font-weight:bold;color:red;margin-left:200px;"> 2:00</p>
         </div>
     
         <table style="width:90%;"  id="game" style="height: 90%;">
@@ -28,11 +28,11 @@
                                     <canvas class="hint_block" id="next" width="100" height="100" > </canvas>
                                     <canvas class="hint_block" id="store" width="100" height="100" > </canvas>
                                 </div>
-                                <br>
+                                <!-- <br> -->
                                 <button id="connectButton" name="connectButton" class="buttonleft" style="width:50px;height:30px;">
                                     Ready
                                 </button>
-                                <br>
+                                <!-- <br> -->
                                 <div >
                                     <video id="localVideo"    autoplay muted style="width:240px;height:240px;"></video>
                                 </div>
@@ -44,7 +44,7 @@
                         <div class="enemy_hint">
                             <div id="enemy_score"></div>
                             <video id="remoteVideo" autoplay muted style="width:240px;height:240px;"></video>
-                            <br><br><br><br><br>
+                            <!-- <br><br><br> -->
                             <canvas class="hint_block" id="enemy_next" width="100" height="100" > </canvas>
                             <canvas class="hint_block" id="enemy_store" width="100" height="100" > </canvas>
                         </div>
@@ -138,7 +138,6 @@
                         flag = false;
                     }
                     else {
-                        let jData = JSON.parse(data);
 
                         data = data.replace(/\\n/g, "\\n")  
                             .replace(/\\'/g, "\\'")
@@ -148,7 +147,8 @@
                             .replace(/\\t/g, "\\t")
                             .replace(/\\b/g, "\\b")
                             .replace(/\\f/g, "\\f");
-                            data = data.replace(/[\u0000-\u0019]+/g,""); 
+                        data = data.replace(/[\u0000-\u0019]+/g,""); 
+                        let jData = JSON.parse(data);
                         enemyArena = jData.arena;
                         enemy_player = jData.player;
                         enemy_target_block = jData.target_block;

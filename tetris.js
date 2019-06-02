@@ -101,6 +101,8 @@ function update(time = 0) {
         playerDrop();
         dropCounter = 0;
         sendMessage();
+        //decrease dropInterval 
+        dropInterval -= 8;
     }
 
     timeCounter += deltaTime;
@@ -135,6 +137,7 @@ function update(time = 0) {
 
 function updateScore() {
     document.getElementById('your_score').innerText = player.score;
+    document.getElementById('enemy_score').innerText = enemy_player.score;
 }
 
 document.addEventListener('keydown', event => {
