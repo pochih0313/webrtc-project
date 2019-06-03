@@ -70,11 +70,12 @@
     <!-- set connection -->
     <script>
         var flag = false;
-        var peer = new Peer('B', { host: '192.168.210.15', port: 9000, path: '/api' });
+        var peer = new Peer('B', { host: '140.116.102.163', port: 9000, path: '/api' });
         var con;
         var localVideo;
         var localStream;
         var remoteVideo;
+        var lose = false;
 
         //setting element
         connectButton = document.getElementById('connectButton');
@@ -110,8 +111,7 @@
         function sendMessage(){
             var message = JSON.stringify( 
                 {'arena':arena, 'player':player, 'target_block':target_block,
-                'next_block':next_block, 'store_block':store_block
-            });
+                'next_block':next_block, 'store_block':store_block,'lose':lose});
             con.send(message);
         }
 
@@ -153,11 +153,11 @@
                 else if(data == "connect") {
                     connect_flag = true;
                 }
-                 else if(data == 'lose'){
-                         console.log("Win");
-                         alert('U win');
-                         cancelAnimationFrame(animation);
-                     }
+                 // else if(data == 'lose'){
+                 //         console.log("Win");
+                 //         alert('You win');
+                 //         cancelAnimationFrame(animation);
+                 //     }
                 else {
                     let jData = JSON.parse(data);
                     enemyArena = jData.arena;
@@ -165,6 +165,11 @@
                     enemy_target_block = jData.target_block;
                     enemy_next_block = jData.next_block;
                     drawEnemy();
+                    if(jData.lose)
+                    {
+                        cancelAnimationFrame(animation);
+                        alert('You win');
+                    }
                 }
             });
 

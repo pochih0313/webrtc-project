@@ -55,13 +55,14 @@ function playerReset() {
     //if player lose
     if (collide(arena, player)) {
         //arena.forEach(row => row.fill(0));
-        player.score = 0;
-        console.log('QQ lose')
-        con.send("lose");
-        alert('you lose');
+        // player.score = 0;
+        lose = true;
+        sendMessage();
         cancelAnimationFrame(animation);
+        // alert('You lose');
         setTargetBlock();
         updateScore();
+        alert('You lose');
     }
 }
 
@@ -91,6 +92,8 @@ function set_store_block() {
 	drawStore(store_block.matrix, {x: 0, y: 0}, store_canvas, store_context);
 }
 
+//use a counter to get how many time past
+//if counter > interval, rendering
 let dropCounter = 0;
 let dropInterval = 1000;
 let timeCounter = 0;
@@ -107,7 +110,6 @@ function update(time = 0) {
         dropCounter = 0;
         sendMessage();
         //decrease dropInterval 
-        dropInterval -= 8;
     }
 
     timeCounter += deltaTime;
@@ -126,6 +128,8 @@ function update(time = 0) {
         }   
         //update count down clock
         document.getElementById("time").innerHTML = minutes + ":" + seconds;
+        //make game faster
+        dropInterval -= 8;
         timeCounter = 0;
     }
     lastTime = time;
@@ -136,7 +140,6 @@ function update(time = 0) {
         //Make update run continously
         //And send game status
         animation = requestAnimationFrame(update);
-        // sendMessage();
     }
     else
     {
